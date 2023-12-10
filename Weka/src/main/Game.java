@@ -18,6 +18,7 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 import algoritimo.SemaforoNeural;
+import ambiente.Ambiente;
 import entidades.Carro;
 import entidades.Entity;
 import graficos.UI;
@@ -40,6 +41,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	public static Random rand = new Random();
 	public static UI ui = new UI();
 	public static List<Entity> entities;
+	public static Ambiente ambiente = new Ambiente();
 	
 	public Game() throws Exception{
 		addKeyListener(this);
@@ -50,9 +52,10 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
 		
-		for(int i = 0; i < 5; i++) {
+		//ADICIONAR OS CARROS
+		for(int i = 0; i < 10; i++) {
 			SemaforoNeural ambiente = new SemaforoNeural();
-			Carro carro = new Carro(0, (HEIGHT*16)*(i+1)/100, 20, 8, 1, null, ambiente, rand.nextInt(3));
+			Carro carro = new Carro(0, (HEIGHT*9)*(i+1)/100, 10, 4, 1, null, ambiente, rand.nextInt(3));
 			entities.add(carro); 
 		}
 		
@@ -95,10 +98,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		}
 		
 	}
-	
 
-
-	
 	public void render(){
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null){
@@ -108,8 +108,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		Graphics g = image.getGraphics();
 		g.setColor(new Color(122,102,255));
 		g.fillRect(0, 0,WIDTH,HEIGHT);
-		
-		/*Renderiza��o do jogo*/
+
 		//Graphics2D g2 = (Graphics2D) g;
 		for(int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
@@ -173,33 +172,9 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		if(this.y > 0 && this.y <= Game.HEIGHT*10/100) {
-			if(this.x >= Game.WIDTH*35/100 && this.x <= Game.WIDTH*35/100 + Game.WIDTH*10/100) {
-				ui.corEscolhida = 35;
-				definirAcao(0);
-			}else if(this.x >= Game.WIDTH*45/100 && this.x <= Game.WIDTH*45/100 + Game.WIDTH*10/100) {
-				ui.corEscolhida = 45;
-				definirAcao(1);
-			}else if(this.x >= Game.WIDTH*55/100 && this.x <= Game.WIDTH*55/100 + Game.WIDTH*10/100) {
-				ui.corEscolhida = 55;
-				definirAcao(2);
-			}
-		}
+		
 	}
-	public void definirAcao(int cor) {
-		for(int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
-			if(e instanceof Carro) {
-				try {
-					Carro carro = (Carro) e;
-					carro.acao = carro.ambiente.passo(0, cor, carro.experiencia);
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		}
-	}
+	
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
@@ -220,7 +195,31 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
+		if(this.y > 0 && this.y <= Game.HEIGHT*10/100) {
+			if(this.x >= Game.WIDTH*35/100 && this.x <= Game.WIDTH*35/100 + Game.WIDTH*10/100) {
+				ui.corEscolhida = 35;
+				ambiente.trocarCor(0);
+			}else if(this.x >= Game.WIDTH*45/100 && this.x <= Game.WIDTH*45/100 + Game.WIDTH*10/100) {
+				ui.corEscolhida = 45;
+				ambiente.trocarCor(1);
+			}else if(this.x >= Game.WIDTH*55/100 && this.x <= Game.WIDTH*55/100 + Game.WIDTH*10/100) {
+				ui.corEscolhida = 55;
+				ambiente.trocarCor(2);
+			}
+		}
 		
+		if(this.y > 0 && this.y <= Game.HEIGHT*5/100) {
+			if(this.x >= 0 && this.x <= Game.WIDTH*5/100) {
+				ui.horarioEscolhido = 0;
+				ambiente.horario = 0;
+			}else if(this.x >= Game.WIDTH*5/100 && this.x <= Game.WIDTH*5/100 + Game.WIDTH*5/100) {
+				ui.horarioEscolhido = 5;
+				ambiente.horario = 1;
+			}else if(this.x >= Game.WIDTH*10/100 && this.x <= Game.WIDTH*10/100 + Game.WIDTH*5/100) {
+				ui.horarioEscolhido = 10;
+				ambiente.horario = 2;
+			}
+		}
 	}
 
 	@Override
