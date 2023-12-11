@@ -106,7 +106,14 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 			return;
 		}
 		Graphics g = image.getGraphics();
-		g.setColor(new Color(122,102,255));
+		if(ambiente.horario == 0) {
+			g.setColor(new Color(122,130,255));
+		}else if(ambiente.horario == 1){
+			g.setColor(new Color(122,80,255));
+		}else if(ambiente.horario == 2){
+			g.setColor(new Color(100,0,255));
+		}
+		
 		g.fillRect(0, 0,WIDTH,HEIGHT);
 
 		//Graphics2D g2 = (Graphics2D) g;
