@@ -26,7 +26,7 @@ public class SemaforoNeural {
 	List<String> estados = Arrays.asList("MANHA", "TARDE", "NOITE");
 	List<String> farol = Arrays.asList("LIGADO" , "DESLIGADO");
 	//VARIAVEL PARA SALVAR ARQUIVOS
-	public boolean saveArff;
+	public boolean saveArff = true;
 	//QUANTIDADE DE REGISTROS INICIAIS PARA SEREM ESTUDADOS
 	private static final double BASE_INICIAL = 400;
 	
@@ -81,7 +81,7 @@ public class SemaforoNeural {
     	}else if(cor == 0 && acao == 2) {
     		desempenho = 0;
     	}else if(cor == 1 && acao == 0) {
-    		desempenho = 0;
+    		desempenho = 1;
     	}else if(cor == 1 && acao == 1) {
     		desempenho = 2;
     	}else if(cor == 1 && acao == 2) {
