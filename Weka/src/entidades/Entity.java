@@ -13,6 +13,8 @@ public class Entity {
 	protected int width;
 	protected int height;
 	public double speed;
+	protected int sensorWidth;
+	protected int sensorHeight;
 	protected BufferedImage sprite;
 	
 	public static Random rand = new Random();
@@ -42,14 +44,36 @@ public class Entity {
 		return (int)this.y;
 	}
 	
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
 	public int getWidth() {
 		return this.width;
 	}
-	
+	public void setHeight(int height) {
+		this.height = height;
+	}
 	public int getHeight() {
 		return this.height;
 	}
 	
+	public int getSensorWidth() {
+		return sensorWidth;
+	}
+
+	public void setSensorWidth(int sensorWidth) {
+		this.sensorWidth = sensorWidth;
+	}
+
+	public int getSensorHeight() {
+		return sensorHeight;
+	}
+
+	public void setSensorHeight(int sensorHeight) {
+		this.sensorHeight = sensorHeight;
+	}
+
 	public void tick(){}
 	
 	public double calculateDistance(int x1,int y1,int x2,int y2) {
@@ -57,9 +81,10 @@ public class Entity {
 	}
 	
 
-	public static boolean isColidding(Entity e1,Entity e2){
-		Rectangle e1Mask = new Rectangle(e1.getX(),e1.getY(),e1.getWidth(),e1.getHeight());
-		Rectangle e2Mask = new Rectangle(e2.getX(),e2.getY(),e2.getWidth(),e2.getHeight());
+	public boolean isColidding(Entity e1,Entity e2){
+		
+		Rectangle e1Mask = new Rectangle(e1.getX(),e1.getY(),e1.getSensorWidth(),e1.getSensorHeight());
+		Rectangle e2Mask = new Rectangle(e2.getX(),e2.getY(),e2.getSensorWidth(),e2.getSensorHeight());
 		
 		return e1Mask.intersects(e2Mask);
 	}

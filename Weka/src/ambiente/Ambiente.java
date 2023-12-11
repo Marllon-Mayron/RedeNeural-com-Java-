@@ -22,8 +22,7 @@ public class Ambiente {
 					Carro carro = (Carro) e;
 					carro.acao = carro.ambiente.passo(0, 0, cor, carro.experiencia, Game.ambiente.horario);
 					carro.acao2 = carro.ambiente.passo(1, 0, cor, carro.experiencia, Game.ambiente.horario);
-					
-					System.out.println(carro.acao2);
+				
 					
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block

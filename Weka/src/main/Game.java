@@ -42,6 +42,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	public static UI ui = new UI();
 	public static List<Entity> entities;
 	public static Ambiente ambiente = new Ambiente();
+	public static Config config = new Config();
 	
 	public Game() throws Exception{
 		addKeyListener(this);
