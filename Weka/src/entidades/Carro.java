@@ -29,7 +29,9 @@ public class Carro extends Entity{
 	double aceleracao = 0.0;
 	
 	public boolean ativarFarol;
+	public Estrada estrada;
 	
+	public double frame, secReacao = 5;
 	
 	public Carro(double x, double y, int width, int height, double speed, BufferedImage sprite, SemaforoNeural ambiente, int experiencia, Estrada estrada) {
 		super(x, y, width, height, sprite);
@@ -39,9 +41,16 @@ public class Carro extends Entity{
 		this.width = width;
 		this.speed = speed;
 		this.experiencia = experiencia;
+		this.estrada = estrada;
 	}
 	
 	public void tick() {
+		frame++;
+		if(frame >= secReacao) {
+			frame = 0;
+			Game.ambiente.trocarCor(estrada.corSemaforo);
+		}
+		
 		if(this.x > Game.WIDTH){
 			Game.entities.remove(this);
 		}
@@ -74,8 +83,31 @@ public class Carro extends Entity{
 		for(int i = 0; i < Game.entities.size(); i++) {
 			if(Game.entities.get(i) instanceof Carro) {
 				Carro e = (Carro) Game.entities.get(i);
-				if(this.isColidding(this, e)) {
+				if(e.equals(this)) {
+					continue;
+				}
+				if(this.isCollidingSensor(this, e)) {
+					try {
+						acao = ambiente.passo(0, 0, estrada.corSemaforo, experiencia, Game.ambiente.horario, 1, Game.ambiente.estradas.get(0).xSemaforo);
+						acao2 = ambiente.passo(1, 0, estrada.corSemaforo, experiencia, Game.ambiente.horario, 1, Game.ambiente.estradas.get(0).xSemaforo);
+						
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
+				}
+				
+			}
+		}
+		for(int i = 0; i < Game.entities.size(); i++) {
+			if(Game.entities.get(i) instanceof Carro) {
+				Carro e = (Carro) Game.entities.get(i);
+				if(e.equals(this)) {
+					continue;
+				}
+				if(this.isColliding(this, e)) {
+					Game.entities.remove(this);
 				}
 			}
 		}
@@ -110,7 +142,7 @@ public class Carro extends Entity{
 		}else {
 			g.setColor(Color.darkGray);
 		}
-		g.fillRect(this.getX(), this.getY(), width, height);
+		g.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 		if(experiencia >= 0 && experiencia < 1) {
 			g.setColor(Color.red);
 		}else if(experiencia >= 1 && experiencia < 2) {

@@ -54,11 +54,14 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		entities = new ArrayList<Entity>();
 		
 		//ADICIONAR OS CARROS
-		for(int i = 0; i < 10; i++) {
-			SemaforoNeural ambiente = new SemaforoNeural();
-			Carro carro = new Carro(0, (HEIGHT*9)*(i+1)/100, 10, 4, 1, null, ambiente, rand.nextInt(3), null);
-			entities.add(carro); 
+		for(int j = 0; j < 3; j++) {
+			for(int i = 1; i < 4; i++) {
+				SemaforoNeural ambiente = new SemaforoNeural();
+				Carro carro = new Carro(j * WIDTH*18 /100, (HEIGHT*15)*(i+1)/100, 10, 4, 1, null, ambiente, 2/**rand.nextInt(3)**/, null);
+				entities.add(carro); 
+			}
 		}
+		
 		
 	}
 	

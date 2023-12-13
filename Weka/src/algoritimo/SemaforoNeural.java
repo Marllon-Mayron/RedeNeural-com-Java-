@@ -28,7 +28,7 @@ public class SemaforoNeural {
 	//VARIAVEL PARA SALVAR ARQUIVOS
 	public boolean saveArff = true;
 	//QUANTIDADE DE REGISTROS INICIAIS PARA SEREM ESTUDADOS
-	private static final double BASE_INICIAL = 400;
+	private static final double BASE_INICIAL = 800;
 	
     private static Random random = new Random();
 
@@ -58,8 +58,8 @@ public class SemaforoNeural {
         attributesPedal.add(attSemaforo);
         attributesPedal.add(attAcao);
         attributesPedal.add(attDesempenho);
-        //attributesPedal.add(attDistanciaObstaculo);
-        //attributesPedal.add(attSensor);
+        attributesPedal.add(attDistanciaObstaculo);
+        attributesPedal.add(attSensor);
         datasetPedal = new Instances("Ambiente", attributesPedal, 1);
         datasetPedal.setClass(attAcao); //AQUI DEFINO A CLASSE PREVISORA
         //=============================================================
@@ -76,28 +76,38 @@ public class SemaforoNeural {
         inicializarPopulacaoRedesNeurais();
     }
     //AVALIAR OS COMPORTAMENTOS DOS REGISTROS ALEATORIOS, PARA OS NOVOS REGISTROS QUE FOREM ESTUDAR, ESTUDAREM DE BASES CORRETAS.
-    public int classificarDesempenhoPedal(int acao, int cor) {
+    public int classificarDesempenhoPedal(int acao, int cor, int sensor, int distancia) {
     	int desempenho = 0;
-    	if(cor == 0 && acao == 0) {
-    		desempenho = 2;
-    	}else if(cor == 0 && acao == 1) {
-    		desempenho = 1;
-    	}else if(cor == 0 && acao == 2) {
-    		desempenho = 0;
-    	}else if(cor == 1 && acao == 0) {
-    		desempenho = 1;
-    	}else if(cor == 1 && acao == 1) {
-    		desempenho = 2;
-    	}else if(cor == 1 && acao == 2) {
-    		desempenho = 1;
-    	}else if(cor == 2 && acao == 0) {
-    		desempenho = 0;
-    	}else if(cor == 2 && acao == 1) {
-    		desempenho = 1;
-    	}else if(cor == 2 && acao == 2) {
-    		desempenho = 2;
+    	if(sensor == 0) {
+    		if(cor == 0 && acao == 0) {
+        		desempenho+=2;
+        	}else if(cor == 0 && acao == 1) {
+        		desempenho+=1;
+        	}else if(cor == 0 && acao == 2) {
+        		
+        	}else if(cor == 1 && acao == 0) {
+        		desempenho+=1;
+        	}else if(cor == 1 && acao == 1) {
+        		desempenho+=2;
+        	}else if(cor == 1 && acao == 2) {
+        		desempenho+=1;
+        	}else if(cor == 2 && acao == 0) {
+        		
+        	}else if(cor == 2 && acao == 1) {
+        		desempenho+=1;
+        	}else if(cor == 2 && acao == 2) {
+        		desempenho+=2;
+        	}
+    	}else {
+    		if(acao == 0) {
+    			
+        	}else if(acao == 1) {
+        		desempenho+=2;
+        	}else if(acao == 2) {
+        		desempenho+=1;
+        	}
     	}
-
+    	
     	return desempenho;
     }
     public int classificarDesempenhoFarol(int estado, int farolDecisao) {
@@ -115,7 +125,7 @@ public class SemaforoNeural {
     		desempenho = 2;
     	}else if(estado == 2 && farolDecisao == 1) {
     		desempenho = 0;
-    	}		
+    	}
     	
     	return desempenho;
     }
@@ -128,10 +138,11 @@ public class SemaforoNeural {
         	int cor = random.nextInt(3);
         	int estado = random.nextInt(3);
         	int farol = random.nextInt(2);
-        	int desempenhoPedal = classificarDesempenhoPedal(acao, cor);
-        	int desempenhoFarol = classificarDesempenhoFarol(estado, farol);
         	int sensor = random.nextInt(2); 
         	int distancia = random.nextInt(1000);
+        	int desempenhoPedal = classificarDesempenhoPedal(acao, cor, sensor, distancia);
+        	int desempenhoFarol = classificarDesempenhoFarol(estado, farol);
+        	
         	//ADICIONAR O REGISTRO NAS BASES DE DADOS
             adicionarRegistro(0,cor, acao, desempenhoPedal, estado, farol, sensor, distancia);
             adicionarRegistro(1,cor, acao, desempenhoFarol, estado, farol, sensor, distancia);
@@ -145,8 +156,8 @@ public class SemaforoNeural {
             instanciaPedal.setValue(attAcao, acoes.get(acao));
             instanciaPedal.setValue(attDesempenho, desempenhos.get(desempenho));
             instanciaPedal.setValue(attSensor, sensor);
-           // instanciaPedal.setValue(attSensor, distancia);
-            //instanciaPedal.setDataset(datasetPedal);
+            instanciaPedal.setValue(attDistanciaObstaculo, distancia);
+            instanciaPedal.setDataset(datasetPedal);
             datasetPedal.add(instanciaPedal);
     	}else if(base == 1) {
     		Instance instanciaFarol = new DenseInstance(3);
@@ -175,7 +186,7 @@ public class SemaforoNeural {
         System.out.println("BASE CARREGADA===================");
         if(saveArff) {
         	exportarDatasetFarol("res/farol_dataset/dataset_farol_"+count+".arff");
-            exportarDatasetFarol("res/pedal_dataset/dataset_pedal_"+count+".arff");
+            exportarDatasetPedal("res/pedal_dataset/dataset_pedal_"+count+".arff");
             count++;
         }
         //LIMPAR BASES, PARA QUE OUTROS INDIVIDUOS APRENDAM COM OUTRAS EXPERIENCIAS
@@ -186,13 +197,15 @@ public class SemaforoNeural {
         
     }
     
-    public String passo(int acao,int idIndividuo, int cor, int experiencia, int estado) throws Exception {
+    public String passo(int acao,int idIndividuo, int cor, int experiencia, int estado, int sensor, int distancia) throws Exception {
         //CRIANDO INSTANCIA PARA UM NOVO REGISTRO SER CLASSIFICADO
     	String acaoPrevista = "";
     	if(acao == 0) {
-    		Instance instanciaPedal = new DenseInstance(3);
+    		Instance instanciaPedal = new DenseInstance(5);
             instanciaPedal.setValue(attSemaforo, cores.get(cor));
             instanciaPedal.setValue(attDesempenho, desempenhos.get(experiencia));
+            instanciaPedal.setValue(attSensor, sensor);
+            instanciaPedal.setValue(attDistanciaObstaculo, distancia);
             instanciaPedal.setDataset(datasetPedal);
             
             Classifier classificador = populacaoNeuralPedal.get(idIndividuo);

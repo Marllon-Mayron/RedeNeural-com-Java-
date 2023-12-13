@@ -80,10 +80,17 @@ public class Entity {
 	}
 	
 
-	public boolean isColidding(Entity e1,Entity e2){
+	public boolean isCollidingSensor(Entity e1,Entity e2){
 		
 		Rectangle e1Mask = new Rectangle(e1.getX(),e1.getY(),e1.getSensorWidth(),e1.getSensorHeight());
 		Rectangle e2Mask = new Rectangle(e2.getX(),e2.getY(),e2.getSensorWidth(),e2.getSensorHeight());
+		
+		return e1Mask.intersects(e2Mask);
+	}
+	public boolean isColliding(Entity e1,Entity e2){
+		
+		Rectangle e1Mask = new Rectangle(e1.getX(),e1.getY(),e1.getWidth(),e1.getHeight());
+		Rectangle e2Mask = new Rectangle(e2.getX(),e2.getY(),e2.getWidth(),e2.getHeight());
 		
 		return e1Mask.intersects(e2Mask);
 	}

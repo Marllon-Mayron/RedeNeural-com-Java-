@@ -24,8 +24,8 @@ public class Ambiente {
 			if(e instanceof Carro) {
 				try {
 					Carro carro = (Carro) e;
-					carro.acao = carro.ambiente.passo(0, 0, cor, carro.experiencia, Game.ambiente.horario);
-					carro.acao2 = carro.ambiente.passo(1, 0, cor, carro.experiencia, Game.ambiente.horario);
+					carro.acao = carro.ambiente.passo(0, 0, cor, carro.experiencia, Game.ambiente.horario, 0, Game.ambiente.estradas.get(0).xSemaforo);
+					carro.acao2 = carro.ambiente.passo(1, 0, cor, carro.experiencia, Game.ambiente.horario, 0, Game.ambiente.estradas.get(0).xSemaforo);
 				
 					
 				} catch (Exception e1) {

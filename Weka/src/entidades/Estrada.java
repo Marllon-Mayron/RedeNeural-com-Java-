@@ -11,28 +11,26 @@ public class Estrada extends Entity{
 	public boolean isVertical = false;
 	public int xSemaforo =  Game.WIDTH*80/100;
 	public int ySemaforo = Game.HEIGHT*15/100;
-	public int corSemaforo = 2;
+	public static int corSemaforo = 2;
 	public int corEscolhida = -35;
-	public int frame, sec, maxSec;
+	public int frame, sec, maxSec, tempoSemaforo = 2;
 
 	public Estrada(double x, double y, int width, int height, BufferedImage sprite, boolean isVertical) {
 		super(x, y, width, height, sprite);
 		// TODO Auto-generated constructor stub
 	}
 	public void tick() {
-		System.out.println(corSemaforo);
 		frame++;
 		if(frame == 60) {
 			sec++;
 			frame = 0;
-			if(sec == 3) {
+			if(sec == tempoSemaforo) {
 				sec = 0;
 				if(corSemaforo == 2) {
 					corSemaforo = 0;
 				}else {
 					corSemaforo++;
 				}
-				Game.ambiente.trocarCor(corSemaforo);
 			}
 		}
 	}
