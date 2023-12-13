@@ -30,7 +30,7 @@ public class Carro extends Entity{
 	
 	public boolean detectedCar;
 	
-	public Carro(double x, double y, int width, int height, double speed, BufferedImage sprite, SemaforoNeural ambiente, int experiencia) {
+	public Carro(double x, double y, int width, int height, double speed, BufferedImage sprite, SemaforoNeural ambiente, int experiencia, Estrada estrada) {
 		super(x, y, width, height, speed, sprite);
 		this.ambiente = ambiente;
 		this.height = height;
@@ -40,7 +40,7 @@ public class Carro extends Entity{
 	}
 	
 	public void tick() {
-		if(this.x > Game.WIDTH/Game.SCALE){
+		if(this.x > Game.WIDTH){
 			Game.entities.remove(this);
 		}
 		System.out.println(detectedCar);
@@ -102,16 +102,13 @@ public class Carro extends Entity{
 	public void render(Graphics g) {
 		if(Game.config.mostrarSensor) {
 			g.setColor(Color.orange);
-			g.drawRect(this.getX() , (this.getY() - this.sensorHeight/2) + this.height/2, this.sensorWidth, this.sensorHeight);
-			
+			g.drawRect(this.getX() , (this.getY() - this.sensorHeight/2) + this.height/2, this.sensorWidth, this.sensorHeight);	
 		}
-		
 		if(ativarFarol) {
 			g.setColor(Color.gray);
 		}else {
 			g.setColor(Color.darkGray);
 		}
-		
 		g.fillRect(this.getX(), this.getY(), width, height);
 		if(experiencia >= 0 && experiencia < 1) {
 			g.setColor(Color.red);

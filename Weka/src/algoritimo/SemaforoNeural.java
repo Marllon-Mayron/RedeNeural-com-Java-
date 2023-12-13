@@ -38,7 +38,8 @@ public class SemaforoNeural {
     private Attribute attDesempenho;
     private Attribute attEstado;
     private Attribute attFarol;
-     
+    private Attribute attSensor; 
+    private Attribute attDistanciaObstaculo; 
     //BASE DE DADOS
     private Instances datasetPedal, datasetFarol;
     
@@ -49,13 +50,16 @@ public class SemaforoNeural {
         attDesempenho = new Attribute("Desempenho", desempenhos); 
         attEstado = new Attribute("Estado", estados);
         attFarol = new Attribute("Farol", farol);
-        
+        attSensor = new Attribute("Sensor", 1);
+        attDistanciaObstaculo = new Attribute("Obstaculo", 1000);
         //=============================================================
         //INSTANCIAR O AMBIENTE E DEFINIR QUAL O TARGET
         ArrayList<Attribute> attributesPedal = new ArrayList<>();
         attributesPedal.add(attSemaforo);
         attributesPedal.add(attAcao);
         attributesPedal.add(attDesempenho);
+        attributesPedal.add(attDistanciaObstaculo);
+        attributesPedal.add(attSensor);
         datasetPedal = new Instances("Ambiente", attributesPedal, 1);
         datasetPedal.setClass(attAcao); //AQUI DEFINO A CLASSE PREVISORA
         //=============================================================
@@ -126,18 +130,22 @@ public class SemaforoNeural {
         	int farol = random.nextInt(2);
         	int desempenhoPedal = classificarDesempenhoPedal(acao, cor);
         	int desempenhoFarol = classificarDesempenhoFarol(estado, farol);
+        	int sensor = random.nextInt(2); 
+        	int distancia = random.nextInt(1000);
         	//ADICIONAR O REGISTRO NAS BASES DE DADOS
-            adicionarRegistro(0,cor, acao, desempenhoPedal, estado, farol);
-            adicionarRegistro(1,cor, acao, desempenhoFarol, estado, farol);
+            adicionarRegistro(0,cor, acao, desempenhoPedal, estado, farol, sensor, distancia);
+            adicionarRegistro(1,cor, acao, desempenhoFarol, estado, farol, sensor, distancia);
         }
     }
     
-    private void adicionarRegistro(int base,int cor, int acao, int desempenho, int estado, int farolDecisao) {
+    private void adicionarRegistro(int base,int cor, int acao, int desempenho, int estado, int farolDecisao, int sensor, int distancia) {
     	if(base == 0) {
-    		Instance instanciaPedal = new DenseInstance(3);
+    		Instance instanciaPedal = new DenseInstance(5);
             instanciaPedal.setValue(attSemaforo, cores.get(cor));
             instanciaPedal.setValue(attAcao, acoes.get(acao));
             instanciaPedal.setValue(attDesempenho, desempenhos.get(desempenho));
+            instanciaPedal.setValue(attSensor, sensor);
+            instanciaPedal.setValue(attSensor, distancia);
             instanciaPedal.setDataset(datasetPedal);
             datasetPedal.add(instanciaPedal);
     	}else if(base == 1) {
