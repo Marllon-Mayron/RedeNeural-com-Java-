@@ -56,7 +56,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		//ADICIONAR OS CARROS
 		for(int i = 0; i < 10; i++) {
 			SemaforoNeural ambiente = new SemaforoNeural();
-			Carro carro = new Carro(0, (HEIGHT*9)*(i+1)/100, 10, 4, 1, null, ambiente, rand.nextInt(3));
+			Carro carro = new Carro(0, (HEIGHT*9)*(i+1)/100, 10, 4, 1, null, ambiente, rand.nextInt(3), null);
 			entities.add(carro); 
 		}
 		
@@ -97,6 +97,9 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 			Entity e = entities.get(i);
 			e.tick();
 		}
+		for(int i =0; i < ambiente.estradas.size(); i++) {
+			ambiente.estradas.get(i).tick();
+		}
 		
 	}
 
@@ -107,6 +110,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 			return;
 		}
 		Graphics g = image.getGraphics();
+		
 		if(ambiente.horario == 0) {
 			g.setColor(new Color(122,130,255));
 		}else if(ambiente.horario == 1){
@@ -116,12 +120,15 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		}
 		
 		g.fillRect(0, 0,WIDTH,HEIGHT);
-
+		for(int i =0; i < ambiente.estradas.size(); i++) {
+			ambiente.estradas.get(i).render(g);
+		}
 		//Graphics2D g2 = (Graphics2D) g;
 		for(int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			e.render(g);
 		}
+		
 		ui.render(g);
 		g.dispose();
 		g = bs.getDrawGraphics();
@@ -206,13 +213,13 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		if(this.y > 0 && this.y <= Game.HEIGHT*10/100) {
 			if(this.x >= Game.WIDTH*35/100 && this.x <= Game.WIDTH*35/100 + Game.WIDTH*10/100) {
 				ui.corEscolhida = 35;
-				ambiente.trocarCor(0);
+				//ambiente.trocarCor(0);
 			}else if(this.x >= Game.WIDTH*45/100 && this.x <= Game.WIDTH*45/100 + Game.WIDTH*10/100) {
 				ui.corEscolhida = 45;
-				ambiente.trocarCor(1);
+				//ambiente.trocarCor(1);
 			}else if(this.x >= Game.WIDTH*55/100 && this.x <= Game.WIDTH*55/100 + Game.WIDTH*10/100) {
 				ui.corEscolhida = 55;
-				ambiente.trocarCor(2);
+				//ambiente.trocarCor(2);
 			}
 		}
 		

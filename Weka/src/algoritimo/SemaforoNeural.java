@@ -58,8 +58,8 @@ public class SemaforoNeural {
         attributesPedal.add(attSemaforo);
         attributesPedal.add(attAcao);
         attributesPedal.add(attDesempenho);
-        attributesPedal.add(attDistanciaObstaculo);
-        attributesPedal.add(attSensor);
+        //attributesPedal.add(attDistanciaObstaculo);
+        //attributesPedal.add(attSensor);
         datasetPedal = new Instances("Ambiente", attributesPedal, 1);
         datasetPedal.setClass(attAcao); //AQUI DEFINO A CLASSE PREVISORA
         //=============================================================
@@ -145,8 +145,8 @@ public class SemaforoNeural {
             instanciaPedal.setValue(attAcao, acoes.get(acao));
             instanciaPedal.setValue(attDesempenho, desempenhos.get(desempenho));
             instanciaPedal.setValue(attSensor, sensor);
-            instanciaPedal.setValue(attSensor, distancia);
-            instanciaPedal.setDataset(datasetPedal);
+           // instanciaPedal.setValue(attSensor, distancia);
+            //instanciaPedal.setDataset(datasetPedal);
             datasetPedal.add(instanciaPedal);
     	}else if(base == 1) {
     		Instance instanciaFarol = new DenseInstance(3);

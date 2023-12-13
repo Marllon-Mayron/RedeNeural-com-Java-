@@ -13,6 +13,8 @@ import main.Game;
 
 public class Carro extends Entity{
 
+	public double speed;
+	
 	List<String> decisoes = Arrays.asList("ACELERAR" , "FREAR", "PARAR");
 	List<String> farol = Arrays.asList("LIGADO" , "DESLIGADO");
 	
@@ -28,10 +30,10 @@ public class Carro extends Entity{
 	
 	public boolean ativarFarol;
 	
-	public boolean detectedCar;
 	
 	public Carro(double x, double y, int width, int height, double speed, BufferedImage sprite, SemaforoNeural ambiente, int experiencia, Estrada estrada) {
-		super(x, y, width, height, speed, sprite);
+		super(x, y, width, height, sprite);
+		this.speed = speed;
 		this.ambiente = ambiente;
 		this.height = height;
 		this.width = width;
@@ -43,7 +45,6 @@ public class Carro extends Entity{
 		if(this.x > Game.WIDTH){
 			Game.entities.remove(this);
 		}
-		System.out.println(detectedCar);
 		//PEDAL
 		if(acao.equalsIgnoreCase(decisoes.get(0))) {
 			if(aceleracao <= speed) {
