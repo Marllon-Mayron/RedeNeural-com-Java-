@@ -27,6 +27,7 @@ public class Carro extends Entity{
 	
 	double desaceleracao = 0.01;
 	double aceleracao = 0.0;
+	double volante;
 	
 	public boolean ativarFarol;
 	public Estrada estrada;
@@ -48,7 +49,15 @@ public class Carro extends Entity{
 		frame++;
 		if(frame >= secReacao) {
 			frame = 0;
-			Game.ambiente.trocarCor(estrada.corSemaforo);
+			try {
+				acao2 = ambiente.passo(1, 0, estrada.corSemaforo, experiencia, Game.ambiente.horario, detectaSensor(), Game.ambiente.estradas.get(0).xSemaforo);
+				acao = ambiente.passo(0, 0, estrada.corSemaforo, experiencia, Game.ambiente.horario, detectaSensor(), Game.ambiente.estradas.get(0).xSemaforo);
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		
 		if(this.x > Game.WIDTH){
@@ -80,26 +89,7 @@ public class Carro extends Entity{
 		
 		//MUDA O SENSOR DO CARRO
 		sensorController();
-		for(int i = 0; i < Game.entities.size(); i++) {
-			if(Game.entities.get(i) instanceof Carro) {
-				Carro e = (Carro) Game.entities.get(i);
-				if(e.equals(this)) {
-					continue;
-				}
-				if(this.isCollidingSensor(this, e)) {
-					try {
-						acao = ambiente.passo(0, 0, estrada.corSemaforo, experiencia, Game.ambiente.horario, 1, Game.ambiente.estradas.get(0).xSemaforo);
-						acao2 = ambiente.passo(1, 0, estrada.corSemaforo, experiencia, Game.ambiente.horario, 1, Game.ambiente.estradas.get(0).xSemaforo);
-						
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
-				}
-				
-			}
-		}
+		
 		for(int i = 0; i < Game.entities.size(); i++) {
 			if(Game.entities.get(i) instanceof Carro) {
 				Carro e = (Carro) Game.entities.get(i);
@@ -112,22 +102,53 @@ public class Carro extends Entity{
 			}
 		}
 	}
+	public int detectaSensor() {
+		int detectado = 0;
+		for(int i = 0; i < Game.entities.size(); i++) {
+			if(Game.entities.get(i) instanceof Carro) {
+				Carro e = (Carro) Game.entities.get(i);
+				if(e.equals(this)) {
+					continue;
+				}
+				if(this.isCollidingSensor(this, e)) {
+					 detectado = 1;
+				}
+				
+			}
+		}
+		return detectado;
+	}
 	public void sensorController() {
 		
 		if(Game.ambiente.horario == 0) {
-			this.sensorWidth = 30;
-			this.sensorHeight = 22;
-			
+			this.sensorFrontalWidth = 26;
+			this.sensorFrontalHeight = 16;
+			this.sensorDireitoWidth = this.width;
+			this.sensorDireitoHeight = 10;
+			this.sensorEsquerdoWidth = this.width;
+			this.sensorEsquerdoHeight = 10;
 		}else if(Game.ambiente.horario == 1) {
-			this.sensorWidth = 26;
-			this.sensorHeight = 18;
+			this.sensorFrontalWidth = 22;
+			this.sensorFrontalHeight = 12;
+			this.sensorDireitoWidth = this.width;
+			this.sensorDireitoHeight = 8;
+			this.sensorEsquerdoWidth = this.width;
+			this.sensorEsquerdoHeight = 8;
 		}else if(Game.ambiente.horario == 2) {
 			if(ativarFarol) {
-				this.sensorWidth = 26;
-				this.sensorHeight = 18;
+				this.sensorFrontalWidth = 22;
+				this.sensorFrontalHeight = 12;
+				this.sensorDireitoWidth = this.width;
+				this.sensorDireitoHeight = 8;
+				this.sensorEsquerdoWidth = this.width;
+				this.sensorEsquerdoHeight = 8;
 			}else {
-				this.sensorWidth = 18;
-				this.sensorHeight = 14;
+				this.sensorFrontalWidth = 14;
+				this.sensorFrontalHeight = 8;
+				this.sensorDireitoWidth = this.width;
+				this.sensorDireitoHeight = 6;
+				this.sensorEsquerdoWidth = this.width;
+				this.sensorEsquerdoHeight = 6;
 			}
 			
 		}
@@ -135,7 +156,10 @@ public class Carro extends Entity{
 	public void render(Graphics g) {
 		if(Game.config.mostrarSensor) {
 			g.setColor(Color.orange);
-			g.drawRect(this.getX() , (this.getY() - this.sensorHeight/2) + this.height/2, this.sensorWidth, this.sensorHeight);	
+			g.drawRect(this.getX() + this.sensorDireitoWidth, (this.getY() - this.sensorFrontalHeight/2) + this.height/2, this.sensorFrontalWidth, this.sensorFrontalHeight);	
+			g.drawRect(this.getX() , (this.getY()) + this.height, this.sensorDireitoWidth, this.sensorDireitoHeight);	
+			g.drawRect(this.getX() , (this.getY()) - this.sensorDireitoHeight, this.sensorEsquerdoWidth, this.sensorEsquerdoHeight);	
+			
 		}
 		if(ativarFarol) {
 			g.setColor(Color.gray);

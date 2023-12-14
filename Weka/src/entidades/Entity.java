@@ -13,8 +13,13 @@ public class Entity {
 	protected int width;
 	protected int height;
 
-	protected int sensorWidth;
-	protected int sensorHeight;
+	protected int sensorFrontalWidth;
+	protected int sensorFrontalHeight;
+	protected int sensorDireitoWidth;
+	protected int sensorDireitoHeight;
+	protected int sensorEsquerdoWidth;
+	protected int sensorEsquerdoHeight;
+	
 	protected BufferedImage sprite;
 	
 	public static Random rand = new Random();
@@ -57,20 +62,52 @@ public class Entity {
 		return this.height;
 	}
 	
-	public int getSensorWidth() {
-		return sensorWidth;
+	public int getSensorFrontalWidth() {
+		return sensorFrontalWidth;
 	}
 
-	public void setSensorWidth(int sensorWidth) {
-		this.sensorWidth = sensorWidth;
+	public void setSensorFrontalWidth(int sensorWidth) {
+		this.sensorFrontalWidth = sensorWidth;
 	}
 
-	public int getSensorHeight() {
-		return sensorHeight;
+	public int getSensorFrontalHeight() {
+		return sensorFrontalHeight;
 	}
 
-	public void setSensorHeight(int sensorHeight) {
-		this.sensorHeight = sensorHeight;
+	public void setSensorFrontalHeight(int sensorHeight) {
+		this.sensorFrontalHeight = sensorHeight;
+	}
+	
+	public int getSensorDireitoWidth() {
+		return sensorDireitoWidth;
+	}
+
+	public void setSensorDireitoWidth(int sensorDireitoWidth) {
+		this.sensorDireitoWidth = sensorDireitoWidth;
+	}
+
+	public int getSensorDireitoHeight() {
+		return sensorDireitoHeight;
+	}
+
+	public void setSensorDireitoHeight(int sensorDireitoHeight) {
+		this.sensorDireitoHeight = sensorDireitoHeight;
+	}
+
+	public int getSensorEsquerdoWidth() {
+		return sensorEsquerdoWidth;
+	}
+
+	public void setSensorEsquerdoWidth(int sensorEsquerdoWidth) {
+		this.sensorEsquerdoWidth = sensorEsquerdoWidth;
+	}
+
+	public int getSensorEsquerdoHeight() {
+		return sensorEsquerdoHeight;
+	}
+
+	public void setSensorEsquerdoHeight(int sensorEsquerdoHeight) {
+		this.sensorEsquerdoHeight = sensorEsquerdoHeight;
 	}
 
 	public void tick(){}
@@ -82,8 +119,8 @@ public class Entity {
 
 	public boolean isCollidingSensor(Entity e1,Entity e2){
 		
-		Rectangle e1Mask = new Rectangle(e1.getX(),e1.getY(),e1.getSensorWidth(),e1.getSensorHeight());
-		Rectangle e2Mask = new Rectangle(e2.getX(),e2.getY(),e2.getSensorWidth(),e2.getSensorHeight());
+		Rectangle e1Mask = new Rectangle(e1.getX() + e1.getSensorDireitoWidth(),e1.getY(),e1.getSensorFrontalWidth(),e1.getSensorFrontalHeight());
+		Rectangle e2Mask = new Rectangle(e2.getX(),e2.getY(),e2.getWidth(),e2.getHeight());
 		
 		return e1Mask.intersects(e2Mask);
 	}

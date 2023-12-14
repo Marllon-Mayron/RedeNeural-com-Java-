@@ -43,7 +43,7 @@ public class SemaforoNeural {
     //BASE DE DADOS
     private Instances datasetPedal, datasetFarol;
     
-    public SemaforoNeural() throws Exception {
+    public SemaforoNeural(int nvl) throws Exception {
     	//INSTACIAR ATRIBUTOS (NOME DO ATRIBUTO, E O TOTAL DE VARIAÇÕES)
     	attSemaforo = new Attribute("Estado", cores); 
         attAcao = new Attribute("Acao", acoes); 
@@ -71,9 +71,9 @@ public class SemaforoNeural {
         datasetFarol.setClass(attFarol); //AQUI DEFINO A CLASSE PREVISORA
         //=============================================================
         //POPULAR A BASE DE DADOS APRA SER USADA NO TREINAMENTO
-        PopularBase();
+        PopularBase(nvl);
         //CRIAR REDE NEURAL
-        inicializarPopulacaoRedesNeurais();
+        inicializarPopulacaoRedesNeurais(nvl);
     }
     //AVALIAR OS COMPORTAMENTOS DOS REGISTROS ALEATORIOS, PARA OS NOVOS REGISTROS QUE FOREM ESTUDAR, ESTUDAREM DE BASES CORRETAS.
     public int classificarDesempenhoPedal(int acao, int cor, int sensor, int distancia) {
@@ -131,18 +131,34 @@ public class SemaforoNeural {
     }
     		
    
-    private void PopularBase() {
+    private void PopularBase(int nvl) {
         //POPULANDO A BASE DE TREINAMENTO DE ACORDO COM A QUANTIDADE INFORMADA NA BASE_INICIAL
         for(int i = 0; i < BASE_INICIAL; i++) {
-        	int acao = random.nextInt(3);
-        	int cor = random.nextInt(3);
-        	int estado = random.nextInt(3);
-        	int farol = random.nextInt(2);
-        	int sensor = random.nextInt(2); 
-        	int distancia = random.nextInt(1000);
-        	int desempenhoPedal = classificarDesempenhoPedal(acao, cor, sensor, distancia);
-        	int desempenhoFarol = classificarDesempenhoFarol(estado, farol);
+        	int desempenhoPedal = 3;
+        	int acao;
+        	int cor;
+        	int sensor;
+        	int distancia;
         	
+        	do {
+        		acao = random.nextInt(3);
+            	cor = random.nextInt(3);
+            	sensor = random.nextInt(2); 
+            	distancia = random.nextInt(1000);
+            	desempenhoPedal = classificarDesempenhoPedal(acao, cor, sensor, distancia);
+        	}while(desempenhoPedal != nvl);
+        		
+        	
+        	int estado;
+        	int farol;
+        	int desempenhoFarol;
+        	
+        	do {
+        		estado = random.nextInt(3); 
+            	farol = random.nextInt(2);
+            	desempenhoFarol = classificarDesempenhoFarol(estado, farol);
+        	}while(desempenhoFarol != nvl);
+
         	//ADICIONAR O REGISTRO NAS BASES DE DADOS
             adicionarRegistro(0,cor, acao, desempenhoPedal, estado, farol, sensor, distancia);
             adicionarRegistro(1,cor, acao, desempenhoFarol, estado, farol, sensor, distancia);
@@ -168,7 +184,7 @@ public class SemaforoNeural {
     	}
     }
     
-    private void inicializarPopulacaoRedesNeurais() throws Exception {
+    private void inicializarPopulacaoRedesNeurais(int nvl) throws Exception {
     	// CRIA UMA NOVA REDE NEURAL PRA CADA INDIVIDUO
         populacaoNeuralPedal = new ArrayList<>();
         populacaoNeuralFarol = new ArrayList<>();
@@ -193,7 +209,7 @@ public class SemaforoNeural {
         datasetPedal.clear();
         datasetFarol.clear();
         //POPULAR UMA NOVA BASE
-        PopularBase();    
+        PopularBase(nvl);    
         
     }
     

@@ -20,6 +20,7 @@ public class Estrada extends Entity{
 		// TODO Auto-generated constructor stub
 	}
 	public void tick() {
+		 
 		frame++;
 		if(frame == 60) {
 			sec++;
@@ -30,7 +31,7 @@ public class Estrada extends Entity{
 					corSemaforo = 0;
 				}else {
 					corSemaforo++;
-				}
+				}				
 			}
 		}
 	}
