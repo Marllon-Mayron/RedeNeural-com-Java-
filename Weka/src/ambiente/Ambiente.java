@@ -14,7 +14,7 @@ public class Ambiente {
 	public int horario = 0;
 	public static List<Estrada> estradas = new ArrayList<Estrada>();
 	public Ambiente() {
-		Estrada estrada = new Estrada(0, ((Game.HEIGHT * 50) / 100) - ((Game.HEIGHT * 36) /100)/2 , Game.WIDTH, Game.HEIGHT * 36 /100, null, false);
+		Estrada estrada = new Estrada(0, ((Game.HEIGHT * 50) / 100) - ((Game.HEIGHT * 42) /100) /2 , Game.WIDTH, Game.HEIGHT * 42 /100, null, false);
 		estradas.add(estrada);
 	}
 	
@@ -24,8 +24,8 @@ public class Ambiente {
 			if(e instanceof Carro) {
 				try {
 					Carro carro = (Carro) e;
-					carro.acao = carro.ambiente.passo(0, 0, cor, carro.experiencia, Game.ambiente.horario, 0, Game.ambiente.estradas.get(0).xSemaforo);
-					carro.acao2 = carro.ambiente.passo(1, 0, cor, carro.experiencia, Game.ambiente.horario, 0, Game.ambiente.estradas.get(0).xSemaforo);
+					//carro.acao = carro.ambiente.passo(0, 0, cor, carro.experiencia, Game.ambiente.horario, 0, Game.ambiente.estradas.get(0).xSemaforo);
+					//carro.acao2 = carro.ambiente.passo(1, 0, cor, carro.experiencia, Game.ambiente.horario, 0, Game.ambiente.estradas.get(0).xSemaforo);
 				
 					
 				} catch (Exception e1) {

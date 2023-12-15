@@ -17,9 +17,11 @@ public class Carro extends Entity{
 	
 	List<String> decisoes = Arrays.asList("ACELERAR" , "FREAR", "PARAR");
 	List<String> farol = Arrays.asList("LIGADO" , "DESLIGADO");
+	List<String> volantes = Arrays.asList("PARADO" , "DIREITA", "ESQUERDA");
 	
 	public String acao = "";
 	public String acao2 = "";
+	public String acao3 = "";
 	
 	public int experiencia =0;
 	
@@ -27,7 +29,7 @@ public class Carro extends Entity{
 	
 	double desaceleracao = 0.01;
 	double aceleracao = 0.0;
-	double volante;
+	int volante;
 	
 	public boolean ativarFarol;
 	public Estrada estrada;
@@ -50,8 +52,16 @@ public class Carro extends Entity{
 		if(frame >= secReacao) {
 			frame = 0;
 			try {
-				acao2 = ambiente.passo(1, 0, estrada.corSemaforo, experiencia, Game.ambiente.horario, detectaSensor(), Game.ambiente.estradas.get(0).xSemaforo);
-				acao = ambiente.passo(0, 0, estrada.corSemaforo, experiencia, Game.ambiente.horario, detectaSensor(), Game.ambiente.estradas.get(0).xSemaforo);
+				acao3 = ambiente.passo(2, 0, estrada.corSemaforo, experiencia, Game.ambiente.horario, detectaSensor(), Game.ambiente.estradas.get(0).xSemaforo, volante);
+				if(acao3.equals(volantes.get(0))) {
+					volante = 0;
+				}else if(acao3.equals(volantes.get(1))) {
+					volante = 1;
+				}else if(acao3.equals(volantes.get(2))) {
+					volante = 2;
+				}
+				acao2 = ambiente.passo(1, 0, estrada.corSemaforo, experiencia, Game.ambiente.horario, detectaSensor(), Game.ambiente.estradas.get(0).xSemaforo, volante);
+				acao = ambiente.passo(0, 0, estrada.corSemaforo, experiencia, Game.ambiente.horario, detectaSensor(), Game.ambiente.estradas.get(0).xSemaforo, volante);
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -68,7 +78,16 @@ public class Carro extends Entity{
 			if(aceleracao <= speed) {
 				aceleracao += 0.01;
 			}
-			this.x += aceleracao;
+			if(volante == 0) {
+				this.x += aceleracao;
+			}else if(volante == 1) {
+				this.x += aceleracao/2;
+				this.y += aceleracao;
+			}else if(volante == 2) {
+				this.x += aceleracao/2;
+				this.y -= aceleracao;
+			}
+			
 		}else if(acao.equalsIgnoreCase(decisoes.get(1))) {
 			if(aceleracao > 0.1) {
 				aceleracao -= desaceleracao;
@@ -96,25 +115,47 @@ public class Carro extends Entity{
 				if(e.equals(this)) {
 					continue;
 				}
-				if(this.isColliding(this, e)) {
-					Game.entities.remove(this);
-				}
+			}
+			if(this.isColliding(this, Game.entities.get(i))) {
+				Game.entities.remove(this);
 			}
 		}
 	}
 	public int detectaSensor() {
 		int detectado = 0;
+		boolean frente = false, direita = false, esquerda = false;
 		for(int i = 0; i < Game.entities.size(); i++) {
 			if(Game.entities.get(i) instanceof Carro) {
 				Carro e = (Carro) Game.entities.get(i);
 				if(e.equals(this)) {
 					continue;
 				}
-				if(this.isCollidingSensor(this, e)) {
-					 detectado = 1;
-				}
-				
 			}
+			
+			if(this.isCollidingSensorFrontal(this, Game.entities.get(i))) {
+				 frente = true;
+			}if(this.isCollidingSensorDireito(this, Game.entities.get(i))) {
+				direita = true; 
+			}if(this.isCollidingSensorEsquerdo(this, Game.entities.get(i))) {
+				 esquerda = true;
+			}
+			
+			
+		}
+		if(frente) {
+			detectado = 1;
+		}if(direita) {
+			detectado = 2;
+		}if(esquerda) {
+			detectado = 3;
+		}if(direita && frente) {
+			detectado = 4;
+		}if(esquerda && frente) {
+			detectado = 5;
+		}if(esquerda && direita) {
+			detectado = 6;
+		}if(esquerda && direita && frente) {
+			detectado = 7;
 		}
 		return detectado;
 	}

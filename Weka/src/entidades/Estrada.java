@@ -18,6 +18,11 @@ public class Estrada extends Entity{
 	public Estrada(double x, double y, int width, int height, BufferedImage sprite, boolean isVertical) {
 		super(x, y, width, height, sprite);
 		// TODO Auto-generated constructor stub
+		Entity barreira = new Entity(0, y, Game.WIDTH, 2, null);
+		Entity barreira2 = new Entity(0, y + this.height, Game.WIDTH, 2, null);
+		Game.entities.add(barreira);
+		Game.entities.add(barreira2);
+		
 	}
 	public void tick() {
 		 
@@ -38,6 +43,9 @@ public class Estrada extends Entity{
 	public void render(Graphics g) {
 		g.setColor(Color.white);
 		g.fillRect((int)x, (int)y, width, height);
+		g.setColor(Color.black);
+		g.fillRect(0, (int) y, Game.WIDTH, 2);
+		g.fillRect(0, (int) y + this.height, Game.WIDTH, 2);
 		
 		g.setColor(Color.green);
 		g.fillRect(xSemaforo, ySemaforo + Game.HEIGHT*3/100, Game.WIDTH*2/100, Game.HEIGHT*3/100);

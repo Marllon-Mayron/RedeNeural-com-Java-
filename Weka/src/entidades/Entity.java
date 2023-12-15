@@ -117,9 +117,21 @@ public class Entity {
 	}
 	
 
-	public boolean isCollidingSensor(Entity e1,Entity e2){
+	public boolean isCollidingSensorFrontal(Entity e1,Entity e2){
 		
 		Rectangle e1Mask = new Rectangle(e1.getX() + e1.getSensorDireitoWidth(),e1.getY(),e1.getSensorFrontalWidth(),e1.getSensorFrontalHeight());
+		Rectangle e2Mask = new Rectangle(e2.getX(),e2.getY(),e2.getWidth(),e2.getHeight());
+		
+		return e1Mask.intersects(e2Mask);
+	}public boolean isCollidingSensorDireito(Entity e1,Entity e2){
+		
+		Rectangle e1Mask = new Rectangle(e1.getX(),e1.getY() + e1.getHeight(), e1.getSensorDireitoWidth(),e1.getSensorDireitoHeight());
+		Rectangle e2Mask = new Rectangle(e2.getX(),e2.getY(),e2.getWidth(),e2.getHeight());
+		
+		return e1Mask.intersects(e2Mask);
+	}public boolean isCollidingSensorEsquerdo(Entity e1,Entity e2){
+		
+		Rectangle e1Mask = new Rectangle(e1.getX(),e1.getY() - e1.sensorDireitoHeight, e1.getSensorEsquerdoWidth(),e1.getSensorEsquerdoHeight());
 		Rectangle e2Mask = new Rectangle(e2.getX(),e2.getY(),e2.getWidth(),e2.getHeight());
 		
 		return e1Mask.intersects(e2Mask);

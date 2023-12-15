@@ -41,7 +41,7 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 	public static Random rand = new Random();
 	public static UI ui = new UI();
 	public static List<Entity> entities;
-	public static Ambiente ambiente = new Ambiente();
+	public static Ambiente ambiente;
 	public static Config config = new Config();
 	
 	public Game() throws Exception{
@@ -52,13 +52,13 @@ public class Game extends Canvas implements Runnable,KeyListener,MouseListener,M
 		initFrame();
 		image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
-		
+		ambiente = new Ambiente();
 		//ADICIONAR OS CARROS
 		for(int j = 0; j < 3; j++) {
 			for(int i = 1; i < 4; i++) {
 				int nvl = rand.nextInt(3);
 				SemaforoNeural ambiente = new SemaforoNeural(nvl);
-				Carro carro = new Carro(j * WIDTH*18 /100, (HEIGHT*15)*(i+1)/100, 10, 4, 1, null, ambiente, nvl, null);
+				Carro carro = new Carro(j * WIDTH*18 /100, ((HEIGHT*14)*(i+1)/100) + 11, 10, 4, 1, null, ambiente, nvl, null);
 				entities.add(carro); 
 			}
 		}
